@@ -7,5 +7,12 @@
     curl -LO "https://golang.org/dl/${GO_VERSION}.linux-${GO_ARCH}.tar.gz" && \
     sudo rm -rf /usr/local/go && \
     sudo tar -C /usr/local -xzf "${GO_VERSION}.linux-${GO_ARCH}.tar.gz" && \
-    rm "${GO_VERSION}.linux-${GO_ARCH}.tar.gz" && \
-    echo 'export PATH=$PATH:/usr/local/go/bin' >> /home/isucon/.bashrc
+    rm "${GO_VERSION}.linux-${GO_ARCH}.tar.gz"
+
+- name: "roles/langs.go/tasks/main: Add PATH for Go"
+  become_user: isucon
+  blockinfile:
+    marker: "# {mark} ANSIBLE MANAGED BLOCK go"
+    path: /home/isucon/.bashrc
+    content: |
+      export PATH=$PATH:/usr/local/go/bin
