@@ -1,14 +1,12 @@
 ---
-- name: "roles/langs.go/tasks/main: Install Go 1.16.5 from xbuild"
+- name: "roles/langs.go/tasks/main: Install latest go"
   become_user: isucon
-  command: /tmp/xbuild/go-install 1.16.5 /home/isucon/local/go
-
-- name: "roles/langs.go/tasks/main: Add PATH for Go"
-  become_user: isucon
-  blockinfile:
-    marker: "# {mark} ANSIBLE MANAGED BLOCK go"
-    path: /home/isucon/.bashrc
-    content: |
-      export PATH=/home/isucon/local/go/bin:/home/isucon/go/bin:$PATH
-      export GOROOT=/home/isucon/local/go
+  command: >
+    GO_VERSION=$(curl -s https://go.dev/VERSION?m=text | head -n 1) && \
+    curl -LO "https://golang.org/dl/${GO_VERSION}.linux-amd64.tar.gz" && \
+    sudo rm -rf /usr/local/go && \
+    sudo tar -C /usr/local -xzf "${GO_VERSION}.linux-amd64.tar.gz" && \
+    rm "${GO_VERSION}.linux-amd64.tar.gz" && \
+    echo 'export PATH=$PATH:/usr/local/go/bin' >> ~/.profile && \
+    source ~/.profile
 
