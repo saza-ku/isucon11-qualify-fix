@@ -4,10 +4,14 @@
   shell: |
     ARCH=$(uname -m) && [ "$ARCH" = "x86_64" ] && GO_ARCH="amd64" || GO_ARCH="arm64" && \
     GO_VERSION=$(curl -s https://go.dev/VERSION?m=text | head -n 1) && \
+    INSTALL_DIR="/home/isucon/local" && \
+    mkdir -p "$INSTALL_DIR" && \
     curl -LO "https://golang.org/dl/${GO_VERSION}.linux-${GO_ARCH}.tar.gz" && \
-    sudo rm -rf /usr/local/go && \
-    sudo tar -C /usr/local -xzf "${GO_VERSION}.linux-${GO_ARCH}.tar.gz" && \
-    rm "${GO_VERSION}.linux-${GO_ARCH}.tar.gz"
+    rm -rf "${INSTALL_DIR}/go" && \
+    tar -C "$INSTALL_DIR" -xzf "${GO_VERSION}.linux-${GO_ARCH}.tar.gz" && \
+    rm "${GO_VERSION}.linux-${GO_ARCH}.tar.gz" && \
+    echo "export PATH=\$PATH:${INSTALL_DIR}/go/bin" >> ~/.profile && \
+    source ~/.profile
 
 - name: "roles/langs.go/tasks/main: Add PATH for Go"
   become_user: isucon
@@ -15,4 +19,5 @@
     marker: "# {mark} ANSIBLE MANAGED BLOCK go"
     path: /home/isucon/.bashrc
     content: |
-      export PATH=$PATH:/usr/local/go/bin
+      export PATH=/home/isucon/local/go/bin:/home/isucon/go/bin:$PATH
+      export GOROOT=/home/isucon/local/go
