@@ -1,7 +1,7 @@
 ---
 - name: "roles/langs.go/tasks/main: Install latest go"
   become_user: isucon
-  command: >
+  ansible.builtin.shell: |
     GO_VERSION=$(curl -s https://go.dev/VERSION?m=text | head -n 1) && \
     curl -LO "https://golang.org/dl/${GO_VERSION}.linux-amd64.tar.gz" && \
     sudo rm -rf /usr/local/go && \
