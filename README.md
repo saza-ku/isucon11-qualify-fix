@@ -18,7 +18,7 @@ runcmd:
 
     GITDIR="/tmp/isucon11-qualify"
     rm -rf ${GITDIR}
-    git clone --depth=1 -b aarch64 https://github.com/matsuu/isucon11-qualify.git ${GITDIR}
+    git clone --depth=1 https://github.com/saza-ku/isucon11-qualify-fix.git ${GITDIR}
     (
       cd ${GITDIR}/provisioning/ansible
       # common
